@@ -1,17 +1,20 @@
+// Configuration de express
 const express = require('express');
+const path = require('path');
+
+// Lecture du fichier .env
+require('dotenv').config()
+
+// Lecture du fichier models/index.js afin de lancer la synchronisation de Sequelize
+require('./models/index.js');
+
+// Importation des routeurs
+const indexRouter = require('./routes/index.js');
 const app = express();
-const routes = require('./routes');
 
-// Middlewares
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-// Utilisation des routes
-app.use('/api', routes);
-
-// Démarrer le serveur
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-    console.log(`Serveur démarré sur le port ${port}`);
-});
+app.use('/', indexRouter);
 
 module.exports = app;

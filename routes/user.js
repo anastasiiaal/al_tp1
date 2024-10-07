@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createUser } = require('../service/userService');
+const { createUser, getAllUsers } = require('../service/userService');
 
 router.post('/create', async (req, res) => {
     try {
@@ -17,5 +17,16 @@ router.post('/create', async (req, res) => {
         res.status(500).json({ error: 'Erreur lors de la création de l\'utilisateur' });
     }
 });
+
+router.get('/all', async (req, res) => {
+    try {
+        const users = await getAllUsers();
+        console.log('Utilisateurs récupérés avec succès:', users);
+        res.status(200).json(users);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des utilisateurs:', error.message);
+        res.status(500).json({ error: 'Erreur lors de la récupération des utilisateurs' });
+    }
+})
 
 module.exports = router;

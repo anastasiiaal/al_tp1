@@ -1,6 +1,6 @@
 const { User, Profile } = require('../models');
 
-const createUser = async (firstName, lastName, email, password) => {
+async function createUser (firstName, lastName, email, password) {
     try {
         console.log('Vérification du profil pour l\'email :', email);
 
@@ -32,4 +32,14 @@ const createUser = async (firstName, lastName, email, password) => {
     }
 }
 
-module.exports = { createUser };
+async function getAllUsers () {
+    try {
+        const users = await User.findAll({ include: Profile });
+        return users;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des utilisateurs :', error);
+        throw new Error('Erreur lors de la récupération des utilisateurs');
+    }
+};
+
+module.exports = { createUser, getAllUsers };

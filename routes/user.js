@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createUser, getAllUsers, deleteUser } = require('../service/userService');
+const { createUser, getAllUsers, deleteUser, patchUser } = require('../service/userService');
 
 router.post('/create', async (req, res) => {
     try {
@@ -43,5 +43,27 @@ router.delete('/:id', async (req, res) => {
         res.status(500).json({ error: 'Erreur lors de la suppression de l\'utilisateur' });
     }
 })
+
+router.patch('/update/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updateData = req.body;
+
+        console.log(`Mise à jour partielle de l'utilisateur avec l'ID : ${id}`);
+
+        const result = await patchUser(id, updateData);
+
+        if (result.error) {
+            console.error(result.error);
+            return res.status(404).json({ error: result.error });
+        }
+
+        console.log(result.message);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error('Erreur lors de la mise à jour partielle de l\'utilisateur:', error.message);
+        res.status(500).json({ error: 'Erreur lors de la mise à jour partielle de l\'utilisateur' });
+    }
+});
 
 module.exports = router;

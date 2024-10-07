@@ -58,4 +58,21 @@ async function deleteUser (id) {
     }
 };
 
-module.exports = { createUser, getAllUsers, deleteUser };
+async function patchUser (id, updateData) {
+    try {
+        const user = await User.findByPk(id);
+
+        if (!user) {
+            return { error: `Utilisateur avec l'ID ${id} non trouvé.` };
+        }
+
+        await user.update(updateData);
+
+        return { message: 'Utilisateur mis à jour avec succès', user };
+    } catch (error) {
+        console.error('Erreur lors de la mise à jour partielle de l\'utilisateur:', error);
+        throw new Error('Erreur lors de la mise à jour partielle de l\'utilisateur');
+    }
+};
+
+module.exports = { createUser, getAllUsers, deleteUser, patchUser };

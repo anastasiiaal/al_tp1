@@ -1,7 +1,7 @@
-const createUser = require('../../application/usecases/createUser');
-const getAllUsers = require('../../application/usecases/getAllUsers');
-const deleteUser = require('../../application/usecases/deleteUser');
-const updateUser = require('../../application/usecases/updateUser');
+const createUser = require('../../application/commands/createUser');
+const getAllUsers = require('../../application/queries/getAllUsers');
+const deleteUser = require('../../application/commands/deleteUser');
+const updateUser = require('../../application/commands/updateUser');
 
 const userRepository = require('../../persistence/repositories/userRepository');
 const profileRepository = require('../../persistence/repositories/profileRepository');

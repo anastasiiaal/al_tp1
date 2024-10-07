@@ -1,4 +1,4 @@
 ```
 // start server 
-node app.js
+npm run start
 ```

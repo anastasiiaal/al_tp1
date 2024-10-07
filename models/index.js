@@ -6,8 +6,7 @@ const Profile = require('./Profile')
 
 // relations declaration
 // user can have only one role, a role can define many users
-User.belongsTo(Profile, { as: 'profile', foreignKey: 'ProfileId' });
-Profile.hasMany(User, { foreignKey: 'ProfileId' });
+User.belongsTo(Profile, { foreignKey: 'ProfileId' });
 
 // DB sync
 // sequelize.sync({alter: true});

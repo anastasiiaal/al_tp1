@@ -1,11 +1,9 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('./_database');
+const Profile = require('./Profile');
 
 const User = sequelize.define('User', {
     firstName: {
-        type: DataTypes.STRING,
-    },
-    lastName: {
         type: DataTypes.STRING,
     },
     lastName: {
@@ -23,6 +21,8 @@ const User = sequelize.define('User', {
     indexes: [
         {'unique': true, fields: ['email']},
     ]
-})
+});
 
-module.exports = User
+User.belongsTo(Profile, { as: 'profile', foreignKey: 'ProfileId' });
+
+module.exports = User;

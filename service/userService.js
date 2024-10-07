@@ -42,4 +42,20 @@ async function getAllUsers () {
     }
 };
 
-module.exports = { createUser, getAllUsers };
+async function deleteUser (id) {
+    try {
+        const user = await User.findByPk(id);
+
+        if (!user) {
+            return { error: `Utilisateur avec l'ID ${id} non trouvé.` };
+        }
+
+        await user.destroy();
+        return { message: 'Utilisateur supprimé avec succès' };
+    } catch (error) {
+        console.error('Erreur lors de la suppression de l\'utilisateur:', error);
+        throw new Error('Erreur lors de la suppression de l\'utilisateur');
+    }
+};
+
+module.exports = { createUser, getAllUsers, deleteUser };

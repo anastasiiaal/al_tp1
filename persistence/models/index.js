@@ -9,7 +9,7 @@ const Profile = require('../../domain/entities/Profile')
 User.belongsTo(Profile, { foreignKey: 'ProfileId' });
 
 // DB sync
-sequelize.sync({alter: true});
+// sequelize.sync({alter: true});
 
 module.exports = {
   User: User,

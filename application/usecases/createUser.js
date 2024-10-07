@@ -1,9 +1,16 @@
+const CreateUserDTO = require('../dto/CreateUserDTO');
+
 async function createUser(userData, userRepository, profileRepository) {
     try {
-        console.log('Vérification du profil pour l\'email :', userData.email);
+        const createUserDTO = CreateUserDTO.fromRequest(userData);
+        createUserDTO.validate();
 
-        let profileTitle = userData.email.endsWith('company.com') ? 'Administrateur' : 'Utilisateur Standard';
+        const existingUser = await userRepository.findByEmail(createUserDTO.email);
+        if (existingUser) {
+            throw new Error('Un utilisateur avec cet email existe déjà.');
+        }
 
+        let profileTitle = createUserDTO.email.endsWith('company.com') ? 'Administrateur' : 'Utilisateur Standard';
         let profile = await profileRepository.findByTitle(profileTitle);
         console.log('Profil trouvé ou à créer :', profileTitle);
 
@@ -14,10 +21,10 @@ async function createUser(userData, userRepository, profileRepository) {
 
         console.log('Création de l\'utilisateur avec le profil ID :', profile.id);
         const user = await userRepository.create({
-            firstName: userData.firstName,
-            lastName: userData.lastName,
-            email: userData.email,
-            password: userData.password,
+            firstName: createUserDTO.firstName,
+            lastName: createUserDTO.lastName,
+            email: createUserDTO.email,
+            password: createUserDTO.password,
             ProfileId: profile.id
         });
 

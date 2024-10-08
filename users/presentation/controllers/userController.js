@@ -9,12 +9,19 @@ const profileRepository = require('../../persistence/repositories/profileReposit
 async function createUserController (req, res) {
     try {
         const { firstName, lastName, email, password } = req.body;
+
+        console.log('Requête reçue pour créer un utilisateur avec les données :', { firstName, lastName, email });
+
         const user = await createUser({ firstName, lastName, email, password }, userRepository, profileRepository);
+
+        console.log('Utilisateur créé avec succès:', user);
         res.status(201).json(user);
     } catch (error) {
-        res.status(500).json({ error: 'Erreur lors de la création de l\'utilisateur' });
+        console.error('Erreur lors de la création de l\'utilisateur:', error.message);
+        res.status(500).json({ error: error.message });  // Retourner le message d'erreur complet
     }
 };
+
 
 async function getAllUsersController (req, res) {
     try {

@@ -1,6 +1,10 @@
+const axios = require('axios');
+const { sequelize } = require('../../persistence/models'); 
 const CreateUserDTO = require('../dto/CreateUserDTO');
 
 async function createUser(userData, userRepository, profileRepository) {
+    const transaction = await sequelize.transaction(); 
+
     try {
         const createUserDTO = CreateUserDTO.fromRequest(userData);
         createUserDTO.validate();
@@ -26,13 +30,27 @@ async function createUser(userData, userRepository, profileRepository) {
             email: createUserDTO.email,
             password: createUserDTO.password,
             ProfileId: profile.id
+        }, { transaction });  // include transaction
+
+        const bankUserResponse = await axios.post('http://localhost:4000/bankUser/create', {
+            firstName: createUserDTO.firstName,
+            lastName: createUserDTO.lastName,
+            email: createUserDTO.email,
+            userId: user.id  // link User && BankUser via l'id de User
         });
 
-        console.log('Utilisateur créé avec succès:', user);
+        if (bankUserResponse.status !== 201) {
+            throw new Error('Erreur lors de la création du BankUser dans le micro-service bancaire');
+        }
+
+        await transaction.commit();
+
+        console.log('Utilisateur et BankUser créés avec succès:', user);
         return user;
     } catch (error) {
-        console.error('Erreur lors de la création de l\'utilisateur ou du profil :', error);
-        throw new Error('Erreur lors de la création de l\'utilisateur');
+        await transaction.rollback();
+        console.error('Erreur lors de la création de l\'utilisateur ou du BankUser :', error);
+        throw new Error('Erreur lors de la création de l\'utilisateur et du BankUser');
     }
 }
 

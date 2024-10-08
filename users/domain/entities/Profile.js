@@ -1,4 +1,4 @@
-const sequelize = require('./_database');
+const sequelize = require('../../infrastructure/config/databaseConfig');
 const { DataTypes } = require('sequelize');
 
 const Profile = sequelize.define('Profile', {

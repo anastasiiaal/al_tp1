@@ -1,5 +1,6 @@
 const getBankUser = require('../../application/queries/getBankUser');
 const createBankUser = require('../../application/commands/createBankUser');
+const deleteBankUser = require('../../application/commands/deleteBankUser');  
 
 const bankUserRepository = require('../../persistence/repositories/bankUserRepository');
 const bankAccountRepository = require('../../persistence/repositories/bankAccountRepository');
@@ -29,7 +30,20 @@ const createBankUserController = async (req, res) => {
     }
 };
 
+const deleteBankUserController = async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const result = await deleteBankUser(userId, bankUserRepository);
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error('Erreur lors de la suppression du BankUser :', error.message);
+        return res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = {
     getBankUserController,
-    createBankUserController
+    createBankUserController,
+    deleteBankUserController
 };

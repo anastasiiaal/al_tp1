@@ -4,6 +4,7 @@ const deleteBankUser = require('../../application/commands/deleteBankUser');
 
 const bankUserRepository = require('../../persistence/repositories/bankUserRepository');
 const bankAccountRepository = require('../../persistence/repositories/bankAccountRepository');
+const getBankUserWithAccounts = require('../../application/queries/getBankUserWithAccounts');
 
 const getBankUserController = async (req, res) => {
     try {
@@ -42,8 +43,22 @@ const deleteBankUserController = async (req, res) => {
     }
 };
 
+const getBankUserWithAccountsController = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const bankUser = await getBankUserWithAccounts(id, bankUserRepository);
+
+        res.status(200).json(bankUser);
+    } catch (error) {
+        console.error('Erreur lors de la récupération du BankUser et des BankAccounts:', error.message);
+        res.status(400).json({ error: error.message });
+    }
+};
+
 module.exports = {
     getBankUserController,
     createBankUserController,
-    deleteBankUserController
+    deleteBankUserController,
+    getBankUserWithAccountsController
 };

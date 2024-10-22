@@ -11,6 +11,7 @@ require('./persistence/models/index.js');
 // Importation des routeurs
 const indexRouter = require('./presentation/routes/index.js');
 const bankUserRoutes = require('./presentation/routes/bankUserRoutes');
+const bankAccountRoutes = require('./presentation/routes/bankAccountRoutes');
 const app = express();
 
 app.use(express.json());
@@ -18,5 +19,6 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/', indexRouter);
 app.use('/bankUser', bankUserRoutes);  
+app.use('/bankAccount', bankAccountRoutes);
 
 module.exports = app;
